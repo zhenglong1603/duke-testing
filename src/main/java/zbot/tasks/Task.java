@@ -14,19 +14,9 @@ public abstract class Task {
      * @param description The description of the task.
      */
     public Task(String description) {
-        assert description != null && !description.isBlank() : "description cannot be null or empty";
         this.description = description;
         this.isDone = false;
     }
-
-    /**
-     * Creates a copy of the current task.
-     * This method is intended to be overridden by subclasses of {@link Task}.
-     * It should return a new instance of the task with the same description and relevant state.
-     *
-     * @return A new {@link Task} object with the same description and relevant state as the current task.
-     */
-    public abstract Task copy();
 
     /**
      * Marks the task as done.
@@ -81,5 +71,4 @@ public abstract class Task {
         return String.format("[%s] %s", getStatusIcon(), description);
     }
 }
-
 

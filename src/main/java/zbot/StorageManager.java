@@ -25,11 +25,12 @@ import zbot.tasks.ToDoTask;
  * The storage class ensures that data is properly stored and can be accessed when needed
  * by other components of the application.
  */
-public class StorageManager {
+class StorageManager {
     private final String filePath;
     public StorageManager(String filePath) {
         this.filePath = filePath;
     }
+
 
     /**
      * Loads the existing task list from filePath
@@ -122,7 +123,6 @@ public class StorageManager {
      * @throws IOException if an error occurs while creating directories or writing to the file
      */
     public void saveToFile(TaskList taskList) throws IOException {
-        assert taskList != null : "taskList cannot be null";
         File file = new File(filePath);
         File parentDir = file.getParentFile();
         if (parentDir != null && !parentDir.exists()) {

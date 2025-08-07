@@ -21,8 +21,7 @@ public class DeadlineTask extends Task {
      */
     public DeadlineTask(String description, String deadline) {
         super(description);
-        this.deadline = LocalDate.parse(deadline);
-
+        this.deadline = LocalDate.parse(deadline, inputFormatter);
     }
 
     /**
@@ -41,23 +40,6 @@ public class DeadlineTask extends Task {
      */
     public String getDeadline() {
         return this.deadline.format(inputFormatter);
-    }
-
-    /**
-     * Creates a copy of the current task.
-     * This method is intended to return a new instance of the task with the same description and state.
-     *
-     * @return A new {@link Task} object with the same description and deadline as the current task.
-     */
-    @Override
-    public Task copy() {
-        DeadlineTask taskCopy = new DeadlineTask(this.getDescription(), this.getDeadline());
-        if (this.getDoneStatus()) {
-            taskCopy.markDone();
-        } else {
-            taskCopy.markUndone();
-        }
-        return taskCopy;
     }
 
     /**

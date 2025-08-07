@@ -21,15 +21,10 @@ public class EventTask extends Task {
      * @param fromDate The start date of the event in "yyyy-MM-dd" format.
      * @param toDate The end date of the event in "yyyy-MM-dd" format.
      */
-    public EventTask(String description, String fromDate, String toDate) throws IllegalArgumentException {
+    public EventTask(String description, String fromDate, String toDate) {
         super(description);
         this.fromDate = LocalDate.parse(fromDate, inputFormatter);
         this.toDate = LocalDate.parse(toDate, inputFormatter);
-
-        if (this.toDate.isBefore(this.fromDate)) {
-            throw new IllegalArgumentException(
-                    "Sorry!! The 'to' date cannot be earlier than the 'from' date. Maybe check again?");
-        }
     }
 
     /**
@@ -66,23 +61,6 @@ public class EventTask extends Task {
      */
     public String toDateString() {
         return this.toDate.format(outputFormatter);
-    }
-
-    /**
-     * Creates a copy of the current task.
-     * This method is intended to return a new instance of the task with the same description and state.
-     *
-     * @return A new {@link Task} object with the same description and dates as the current task.
-     */
-    @Override
-    public Task copy() {
-        EventTask taskCopy = new EventTask(this.getDescription(), this.getFromDate(), this.getToDate());
-        if (this.getDoneStatus()) {
-            taskCopy.markDone();
-        } else {
-            taskCopy.markUndone();
-        }
-        return taskCopy;
     }
 
     /**

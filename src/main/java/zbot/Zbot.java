@@ -1,6 +1,7 @@
 package zbot;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 import zbot.exceptions.EmptyTaskListException;
 import zbot.exceptions.IncorrectInputException;
@@ -12,21 +13,18 @@ import zbot.tasks.TaskList;
 /**
  * Main class of the program
  */
-public class Zbot {
+class Zbot {
     private final StorageManager storage;
     private TaskList taskList;
+    private final Ui ui;
 
-    /**
-     * Initializes a new instance of Zbot.
-     *
-     * @param filePath The file path to load existing tasks from storage.
-     */
     public Zbot(String filePath) {
-        assert !filePath.isEmpty() : "filepath should not be empty";
         this.storage = new StorageManager(filePath);
+        this.ui = new Ui();
         try {
             this.taskList = new TaskList(storage.loadExistingFile());
         } catch (ZbotFileNotFoundException | IOException e) {
+            ui.generateResponse("loadingError");
             this.taskList = new TaskList();
         }
     }
@@ -40,14 +38,38 @@ public class Zbot {
      * that the task list is saved to a file before the program ends and then displays an ending response.
      *
      */
-    public String getResponse(String s) {
-        try {
-            return Parser.parseInput(s, taskList, storage);
-        } catch (InvalidCommandException | IncorrectInputException | EmptyTaskListException
-                 | InvalidTaskNumberException exception) {
-            return exception.getMessage();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public void run() {
+        ui.generateResponse("start");
+        Scanner scanner = new Scanner(System.in);
+        boolean isRunning = true;
+        String input;
+
+        while (isRunning) {
+            input = scanner.nextLine();
+
+            if (input.equals("bye")) {
+                isRunning = false;
+            } else {
+                try {
+                    Parser.parseInput(input, ui, taskList);
+                } catch (InvalidCommandException | IncorrectInputException | EmptyTaskListException
+                         | InvalidTaskNumberException exception) {
+                    ui.printResponse(exception.getMessage());
+                }
+            }
         }
+
+        try {
+            storage.saveToFile(taskList);
+        } catch (IOException exception) {
+            ui.printResponse(exception.getMessage());
+        }
+
+        ui.generateResponse("end");
+    }
+
+    public static void main(String[] args) {
+        new Zbot("./data/Zbot.txt").run();
     }
 }
+
