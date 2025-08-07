@@ -7,7 +7,6 @@ import zbot.exceptions.EmptyTaskListException;
 import zbot.exceptions.IncorrectInputException;
 import zbot.exceptions.InvalidCommandException;
 import zbot.exceptions.InvalidTaskNumberException;
-import zbot.exceptions.ZbotFileNotFoundException;
 import zbot.tasks.TaskList;
 
 /**
@@ -21,12 +20,7 @@ class Zbot {
     public Zbot(String filePath) {
         this.storage = new StorageManager(filePath);
         this.ui = new Ui();
-        try {
-            this.taskList = new TaskList(storage.loadExistingFile());
-        } catch (ZbotFileNotFoundException | IOException e) {
-            ui.generateResponse("loadingError");
-            this.taskList = new TaskList();
-        }
+        this.taskList = new TaskList();
     }
 
     /**
