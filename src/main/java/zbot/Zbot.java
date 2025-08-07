@@ -39,7 +39,11 @@ class Zbot {
         String input;
 
         while (isRunning) {
-            input = scanner.nextLine();
+            if (scanner.hasNextLine()) {
+                input = scanner.nextLine();
+            } else {
+                break; // or handle the situation
+            }
 
             if (input.equals("bye")) {
                 isRunning = false;
