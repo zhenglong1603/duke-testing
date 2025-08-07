@@ -48,7 +48,7 @@ jobs:
         run: ./runtest.sh
 
       - name: Perform IO redirection test (Windows)
-        if: always() && runner.os == 'Windows'hi
+        if: always() && runner.os == 'Windows'
         working-directory: ${{ github.workspace }}/text-ui-test
         shell: cmd
         run: runtest.bat
